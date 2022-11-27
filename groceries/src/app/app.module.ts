@@ -9,10 +9,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GroceriesServiceService } from './groceries-service.service';
 import { InputDialogServiceService } from './input-dialog-service.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     GroceriesServiceService, InputDialogServiceService, SocialSharing],
   bootstrap: [AppComponent],

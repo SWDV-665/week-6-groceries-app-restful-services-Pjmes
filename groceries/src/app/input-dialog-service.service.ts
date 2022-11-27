@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { GroceriesServiceService } from './groceries-service.service';
 import { AlertController } from '@ionic/angular';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class InputDialogServiceService {
 
   constructor(public dataService: GroceriesServiceService, public alertCtrl: AlertController) { }
@@ -38,13 +36,15 @@ export class InputDialogServiceService {
         {
           text: 'Save',
           // eslint-disable-next-line @typescript-eslint/no-shadow
-          handler: item => {
-            console.log('Saved clicked', item);
+          handler: data => {
+            console.log('Saved clicked', data);
             if (index !== undefined){
+              item.name = data.name;
+              item.quantity = data.quantity;
               this.dataService.editItem(item, index);
             }
             else{
-            this.dataService.addItem(item);
+            this.dataService.addItem(data);
             }
           }
         }

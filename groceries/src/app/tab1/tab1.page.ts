@@ -17,26 +17,36 @@ export class Tab1Page {
 
   title = 'Grocery';
 
+  items = [];
+  errorMessage: string;
 
-  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public alertCtrl: AlertController,
-    public dataService: GroceriesServiceService, public inputService: InputDialogServiceService,
-    public socialSharing: SocialSharing)  {}
 
-  loadItems(){
-    return this.dataService.getItems();
-  }
-
-  async removeItem(item, index){
-    const toast = await this.toastCtrl.create({
-      message: 'Removing - ' + item.name + '...',
-      duration: 3000,
+  constructor(
+    public toastCtrl: ToastController,
+    public alertController: AlertController,
+    public dataService: GroceriesServiceService,
+    public inputService: InputDialogServiceService,
+    public socialSharing: SocialSharing) {
+    dataService.dataChanged$.subscribe((dataChanged: boolean) => {
+        this.loadItems();
     });
-    toast.present();
-
-    this.dataService.removeItem(index);
   }
 
-  async shareItem(item, index){
+  ionViewDidLoad() {
+    this.loadItems();
+  }
+
+  loadItems() {
+    this.dataService.getItems().subscribe(
+        items => this.items = items,
+        error => this.errorMessage = <any>error);
+  }
+
+  async removeItem(id){
+    this.dataService.removeItem(id);
+  }
+
+  async shareItem(item){
     const toast = await this.toastCtrl.create({
       message: 'Sharing - ' + item.name + '...',
       duration: 3000,
@@ -56,14 +66,14 @@ export class Tab1Page {
   }
 
 
-  async editItem(item, index){
+  async editItem(item){
     const toast = await this.toastCtrl.create({
       message: 'Editing - ' + item.name + '...',
       duration: 3000,
     });
     toast.present();
 
-    this.inputService.showPrompt(item, index);
+    this.inputService.showPrompt(item);
   }
 
 
